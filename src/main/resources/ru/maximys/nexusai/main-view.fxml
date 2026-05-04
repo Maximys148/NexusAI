@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns="http://javafx.com"
+      xmlns:fx="http://javafx.com"
+      fx:controller="ru.maximys.nexusai.ui.controller.MainController"
+      stylesheets="@/css/mainStyle.css"
+      spacing="0"
+      prefWidth="1000"
+      prefHeight="600">
+
+    <HBox fx:id="titleBar"
+          alignment="CENTER_LEFT"
+          spacing="0"
+          prefHeight="38"
+          style="-fx-background-color: -color-bg-subtle; -fx-padding: 0 0 0 15;">
+
+        <!-- Логотип приложения
+        <ImageView fx:id="logoView"
+                   fitHeight="25"
+                   fitWidth="25"
+                   pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@/icons/icon.png"/>
+            </image>
+        </ImageView> -->
+
+        <!-- Название приложения -->
+        <Label text="Nexus AI" styleClass="title-4" />
+
+        <Pane HBox.hgrow="ALWAYS" />
+
+    <!-- Группа кнопок управления -->
+        <Button fx:id="minimizeButton" text="—" onAction="#onMinimizeClick"
+                styleClass="window-button" />
+
+        <Button fx:id="maximizeButton" text="🗖" onAction="#onMaximizeClick"
+                styleClass="window-button" />
+
+        <Button fx:id="closeButton" text="✕" onAction="#onCloseClick"
+                styleClass="window-button-close" />
+
+    </HBox>
+
+
+    <!-- Основной контент приложения -->
+    <VBox alignment="CENTER" spacing="20" VBox.vgrow="ALWAYS">
+
+        <Label text="Добро пожаловать в Nexus AI" styleClass="title-2"/>
+
+        <HBox alignment="CENTER" spacing="15">
+            <Button text="Начать поиск" styleClass="accent, large"/>
+            <Button text="Настройки" styleClass="button-outlined, large"/>
+        </HBox>
+
+        <Separator maxWidth="400"/>
+
+        <Button text="О программе" styleClass="flat"/>
+
+    </VBox>
+
+</VBox>

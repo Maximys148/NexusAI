@@ -1,0 +1,51 @@
+/* ======================== */
+/*  ЗАГОЛОВОК               */
+/* ======================== */
+
+/* Фон заголовка */
+.title-bar {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 0;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+}
+
+/* Текст названия приложения */
+.title-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* ======================== */
+/*  КНОПКИ УПРАВЛЕНИЯ ОКНОМ */
+/* ======================== */
+
+/* Общий стиль для кнопок управления окном */
+.window-button, .window-button-close {
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+    /* Увеличим ширину, чтобы по кнопкам было легче попасть */
+    -fx-min-width: 46px;
+    -fx-pref-width: 46px;
+    -fx-min-height: 38px;
+    -fx-pref-height: 38px;
+    -fx-padding: 0;
+    -fx-text-fill: white;
+}
+
+/* Эффект наведения для кнопок управления */
+.window-button:hover {
+    -fx-background-color: #4c566a; /* Светло-серый */
+}
+
+.window-button-close:hover {
+    -fx-background-color: #bf616a; /* Красный */
+}
+
+
+/* Эффект при наведении на кнопку закрытия */
+.danger:hover {
+    -fx-background-color: #ca1825; /* Красный оттенок Nord */
+    -fx-text-fill: white;
+}
