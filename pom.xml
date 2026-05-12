@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>sample</groupId>
-    <artifactId>AiSearchFX</artifactId>
+    <artifactId>Nexus</artifactId>
     <version>0.2.0</version>
-    <name>AiSearchFX</name>
+    <name>Nexus</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

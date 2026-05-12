@@ -85,7 +85,7 @@ public class UpdateService {
                 String currentJarPath = new File(MainApplication.class.getProtectionDomain()
                         .getCodeSource().getLocation().toURI()).getPath();
                 File exeFile = new File(currentJarPath).getParentFile().getParentFile();
-                String exePath = new File(exeFile, "NexusAI.exe").getAbsolutePath();
+                String exePath = new File(exeFile, "Nexus.exe").getAbsolutePath();
 
                 // 3. Скачивание
                 downloadNewVersion(downloadUrl, tempJarPath);
@@ -94,11 +94,11 @@ public class UpdateService {
                 List<String> commands = Arrays.asList(
                         "@echo off",
                         "chcp 65001 > nul",
-                        "echo [Nexus AI Update] Ожидание закрытия программы...",
+                        "echo [Nexus Update] Ожидание закрытия программы...",
                         "timeout /t 3 /nobreak > nul",
-                        "echo [Nexus AI Update] Замена файлов...",
+                        "echo [Nexus Update] Замена файлов...",
                         "move /y \"" + tempJarPath + "\" \"" + currentJarPath + "\"",
-                        "echo [Nexus AI Update] Перезапуск...",
+                        "echo [Nexus Update] Перезапуск...",
                         "start \"\" \"" + exePath + "\"",
                         "exit"
                 );

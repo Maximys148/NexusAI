@@ -16,7 +16,7 @@
 
     <HBox fx:id="titleBar" alignment="CENTER_LEFT" spacing="0" prefHeight="38"
           style="-fx-background-color: -color-bg-subtle; -fx-padding: 0 0 0 15;">
-        <Label text="Nexus AI" styleClass="title-4" />
+        <Label text="Nexus" styleClass="title-4" />
         <Pane HBox.hgrow="ALWAYS" />
         <Button fx:id="profileButton" text="Profile"
                 styleClass="flat" style="-fx-text-fill: -color-accent-fg;"/>
