@@ -8,8 +8,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Service;
 
+// Сервис отвечающий за работу раздела чата
+
 @Service
 public class ChatService {
+
     public void addMessage(String text, boolean isUser, ScrollPane chatScrollPane, VBox messageContainer) {
         HBox messageBox = new HBox();
         Label label = new Label(text);
@@ -20,9 +23,7 @@ public class ChatService {
 
         if (isUser) {
             messageBox.setAlignment(Pos.CENTER_RIGHT);
-            // Добавляем классы AtlantaFX для цвета
             label.getStyleClass().addAll("accent", "user-message");
-            // Оставляем в setStyle только геометрию (скругление)
             label.setStyle("-fx-background-radius: 15 15 2 15; -fx-padding: 8 12; -fx-font-size: 14px;");
         } else {
             messageBox.setAlignment(Pos.CENTER_LEFT);

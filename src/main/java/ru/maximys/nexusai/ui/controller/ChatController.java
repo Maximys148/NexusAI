@@ -1,25 +1,26 @@
 package ru.maximys.nexusai.ui.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.maximys.nexusai.backend.service.ChatService;
 
+// Контролер отвечающий за отображения страницы чата (chat-view.fxml)
+
 @Component
 public class ChatController {
-    @Autowired
-    private ChatService chatService;
+
+    private final ChatService chatService;
 
     @FXML private VBox messageContainer;
     @FXML private TextField userMessageField;
     @FXML private ScrollPane chatScrollPane;
+
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     @FXML
     public void onSendMessage() {

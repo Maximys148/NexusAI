@@ -1,6 +1,5 @@
 package ru.maximys.nexusai;
 
-import atlantafx.base.theme.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,58 +13,41 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.maximys.nexusai.backend.config.AppSettings;
+import ru.maximys.nexusai.backend.service.LanguageService;
+import ru.maximys.nexusai.backend.service.MainApplicationService;
 import ru.maximys.nexusai.backend.service.SettingService;
 
 import java.util.Objects;
 
-@SpringBootApplication()
+// Класс запуска приложения
+
+@SpringBootApplication
 public class MainApplication extends Application {
 
-    private ConfigurableApplicationContext springContext;
-
-    // В MainApplication.java
-    private static MainApplication instance;
-
-    public static MainApplication getInstance() {
-        return instance;
-    }
+    private static ConfigurableApplicationContext springContext;
 
     @Override
     public void init() {
-        // Запускаем Spring при старте приложения
         springContext = new SpringApplicationBuilder(MainApplication.class).run();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        instance = this;
-
-        String savedTheme = springContext.getBean(AppSettings.class).getSavedTheme();
-        springContext.getBean(SettingService.class).apply(savedTheme);
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ru/maximys/nexusai/main-view.fxml"));
-        loader.setControllerFactory(springContext::getBean);
-
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 1000, 600);
-        scene.setFill(Color.TRANSPARENT);
-
-        stage.initStyle(StageStyle.TRANSPARENT);
-
-        stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("/icons/icon.png"))));
-        stage.setTitle("Nexus AI");
-        stage.setScene(scene);
-        stage.show();
+        MainApplicationService mainApplicationService = springContext.getBean(MainApplicationService.class);
+        mainApplicationService.showMainScene(stage);
     }
 
     @Override
     public void stop() {
-        // Закрываем контекст Spring при выходе
         springContext.close();
         Platform.exit();
     }
 
+    public static ConfigurableApplicationContext getContext() {
+        return springContext;
+    }
+
     public static void main(String[] args) {
-        Application.launch(MainApplication.class, args);
+        launch(args);
     }
 }
