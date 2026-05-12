@@ -6,7 +6,7 @@
       xmlns="http://javafx.com"
       xmlns:fx="http://javafx.com"
       fx:controller="ru.maximys.nexusai.ui.controller.ChatController">
-    <!-- Область диалога (скроллится) -->
+    <!-- Область диалога -->
     <ScrollPane fx:id="chatScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS"
                 styleClass="edge-to-edge" style="-fx-background-color: transparent;">
         <VBox fx:id="messageContainer" spacing="15" style="-fx-padding: 10;">

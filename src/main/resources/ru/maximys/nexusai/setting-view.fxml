@@ -3,14 +3,27 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 
+<?import javafx.scene.layout.Pane?>
+
 <VBox spacing="20" alignment="TOP_LEFT" style="-fx-padding: 30;"
       xmlns="http://javafx.com"
       xmlns:fx="http://javafx.com"
       fx:controller="ru.maximys.nexusai.ui.controller.SettingsController">
-    <Label text="Настройки внешнего вида" styleClass="title-2"/>
 
+    <Label fx:id="settingsHeaderLabel" text="Настройки внешнего вида" styleClass="title-2"/>
+
+    <!-- Тема -->
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Тема приложения:"/>
-        <ComboBox fx:id="themeComboBox" prefWidth="200" promptText="Выберите тему"/>
+        <Label fx:id="themeTitleLabel" text="Theme" styleClass="title-4" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="themeComboBox" prefWidth="200" />
     </HBox>
+
+    <!-- Язык -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label fx:id="languageTitleLabel" text="Language" styleClass="title-4" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="languageComboBox" prefWidth="200" />
+    </HBox>
+
 </VBox>

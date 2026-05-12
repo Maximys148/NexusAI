@@ -12,31 +12,41 @@
       prefWidth="1000"
       prefHeight="600">
 
-    <!-- Заголовок (TitleBar) - ОСТАВЛЯЕМ КАК ЕСТЬ -->
+    <!-- Заголовок (TitleBar) -->
+
     <HBox fx:id="titleBar" alignment="CENTER_LEFT" spacing="0" prefHeight="38"
           style="-fx-background-color: -color-bg-subtle; -fx-padding: 0 0 0 15;">
         <Label text="Nexus AI" styleClass="title-4" />
         <Pane HBox.hgrow="ALWAYS" />
-        <Button text="Профиль" styleClass="flat" style="-fx-text-fill: -color-accent-fg;"/>
+        <Button fx:id="profileButton" text="Profile"
+                styleClass="flat" style="-fx-text-fill: -color-accent-fg;"/>
         <Button fx:id="minimizeButton" text="—" onAction="#onMinimizeClick" styleClass="window-button" />
         <Button fx:id="maximizeButton" text="🗖" onAction="#onMaximizeClick" styleClass="window-button" />
         <Button fx:id="closeButton" text="✕" onAction="#onCloseClick" styleClass="window-button-close" />
     </HBox>
 
-    <!-- Основная рабочая область - ОСТАВЛЯЕМ КАК ЕСТЬ -->
+    <!-- Основная рабочая область -->
+
     <HBox VBox.vgrow="ALWAYS">
         <VBox prefWidth="200" spacing="5" style="-fx-background-color: -color-bg-inset; -fx-padding: 10;">
-            <Label text="ФУНКЦИИ" style="-fx-font-size: 10; -fx-text-fill: -color-fg-muted; -fx-padding: 0 0 5 5;"/>
-            <Button text="Текст" onAction="#onChatButtonClick" maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
-            <Button text="Изображения" maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
-            <Button text="Видео" maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
-            <Button text="Аудио" maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+            <Label fx:id="functionsLabel" text="FUNCTION"
+                   style="-fx-font-size: 10; -fx-text-fill: -color-fg-muted; -fx-padding: 0 0 5 5;"/>
+            <Button fx:id="textButton" text="Text" onAction="#onChatButtonClick"
+                    maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+            <Button fx:id="imageButton" text="Image" onAction="#onImageButtonClick"
+                    maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+            <Button fx:id="videoButton" text="Video"
+                    maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+            <Button fx:id="audioButton" text="Audio"
+                    maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
             <Spacer VBox.vgrow="ALWAYS"/>
             <Separator />
-            <Button text="Настройки" onAction="#onSettingButtonClick" maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
-            <!-- [ПЕРЕНЕСЕНО СЮДА] Кнопка обновления -->
+            <Button fx:id="settingsButton" text="Settings" onAction="#onSettingButtonClick"
+                    maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+
+            <!-- Кнопка обновления -->
             <Button fx:id="updateButton"
-                    text="Обновить Nexus AI"
+                    text="Update"
                     onAction="#onUpdateClick"
                     visible="false"
                     managed="false"
@@ -45,16 +55,16 @@
                     styleClass="flat"
                     style="-fx-text-fill: -color-warning-fg; -fx-font-weight: bold;"/>
 
-            <!-- Метка версии (теперь просто маленькая цифра в самом низу) -->
+            <!-- Метка версии -->
             <Label fx:id="versionLabel" style="-fx-font-size: 10; -fx-opacity: 0.4; -fx-padding: 5 0 0 5;"/>
         </VBox>
 
         <StackPane fx:id="contentArea" HBox.hgrow="ALWAYS" style="-fx-background-color: -color-bg-default; -fx-padding: 20;">
             <VBox alignment="CENTER" spacing="20">
-                <Label text="Проверка обновления(должна быть версия 0.1.2)" styleClass="title-2" />
-                <Label text="Здесь появятся доступные нейросети" styleClass="text-muted" />
+                <Label fx:id="welcomeLabel" text="Select generation type" styleClass="text-muted" />
             </VBox>
         </StackPane>
+
     </HBox>
 
 </VBox>
