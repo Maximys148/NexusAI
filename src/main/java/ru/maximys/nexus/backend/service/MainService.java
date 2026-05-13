@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.maximys.nexus.backend.config.AppSettings;
 import ru.maximys.nexus.backend.service.update.UpdateService;
 
 import java.util.Map;
@@ -24,14 +25,18 @@ public class MainService {
     private final LanguageService langService;
     private final UpdateService updateService;
     private final NavigationService navService;
+    private final SettingService settingService;
+    private final AppSettings appSettings;
 
     private double xOffset = 0;
     private double yOffset = 0;
 
-    public MainService(LanguageService langService, UpdateService updateService, NavigationService navService) {
+    public MainService(LanguageService langService, UpdateService updateService, NavigationService navService, SettingService settingService, AppSettings appSettings) {
         this.langService = langService;
         this.updateService = updateService;
         this.navService = navService;
+        this.settingService = settingService;
+        this.appSettings = appSettings;
     }
 
     public void initMainView(HBox titleBar, Map<String, Labeled> uiElements) {
@@ -42,7 +47,12 @@ public class MainService {
         // 2. Локализация
         bindUserInterface(uiElements);
 
-        // 3. Обновления
+        // 3. Масштабирование
+        Platform.runLater(() -> {
+            settingService.applyScaling(appSettings.getSavedScale(), titleBar);
+        });
+
+        // 4. Обновления
         Labeled versionLabel = uiElements.get("versionLabel");
         versionLabel.setText("v" + updateService.getCurrentVersion());
         Labeled updateButton = uiElements.get("updateButton");
@@ -51,6 +61,8 @@ public class MainService {
             updateButton.setManaged(true);
             versionLabel.setText(versionInfo);
         });
+
+
     }
 
     private void makeDraggable(Node node) {

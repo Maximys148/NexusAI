@@ -16,4 +16,22 @@ public class AppSettings {
         // По умолчанию возвращаем Nord Dark, если ничего не сохранено
         return prefs.get(THEME_KEY, "Nord Dark");
     }
+
+    // Масштаб
+    public double getSavedScale() {
+        return prefs.getDouble("ui_scale", 14.0);
+    }
+
+    public void saveScale(double value) {
+        prefs.putDouble("ui_scale", value);
+    }
+
+    // Автозагрузка
+    public boolean isStartupEnabled() {
+        return prefs.getBoolean("startup", false);
+    }
+
+    public void saveStartup(boolean value) {
+        prefs.putBoolean("startup", value);
+    }
 }

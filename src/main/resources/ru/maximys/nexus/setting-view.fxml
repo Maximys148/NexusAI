@@ -5,6 +5,9 @@
 
 <?import javafx.scene.layout.Pane?>
 
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Slider?>
+
 <VBox spacing="20" alignment="TOP_LEFT" style="-fx-padding: 30;"
       xmlns="http://javafx.com"
       xmlns:fx="http://javafx.com"
@@ -24,6 +27,21 @@
         <Label fx:id="languageTitleLabel" text="Language" styleClass="title-4" />
         <Pane HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="languageComboBox" prefWidth="200" />
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label fx:id="scalingTitleLabel" text="Масштаб интерфейса:" styleClass="title-4" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <!-- Теперь здесь ComboBox вместо Slider -->
+        <ComboBox fx:id="scalingComboBox" prefWidth="200" />
+    </HBox>
+
+
+    <!-- Автозагрузка -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label fx:id="startupTitleLabel" text="Run on system startup" styleClass="title-4" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <CheckBox fx:id="startupCheckBox" />
     </HBox>
 
 </VBox>
