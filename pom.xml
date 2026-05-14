@@ -6,7 +6,7 @@
 
     <groupId>sample</groupId>
     <artifactId>Nexus</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <name>Nexus</name>
 
     <parent>
@@ -33,6 +33,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- JavaFX -->
@@ -69,7 +81,7 @@
             <version>12.3.1</version>
         </dependency>
 
-        <!-- Тестирование (ОСТАВЛЯЕМ ТОЛЬКО ОДИН РАЗ) -->
+        <!-- Тестирование -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

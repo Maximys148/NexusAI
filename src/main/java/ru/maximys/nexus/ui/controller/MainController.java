@@ -1,9 +1,11 @@
 package ru.maximys.nexus.ui.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.maximys.nexus.backend.service.MainService;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,56 +26,29 @@ public class MainController {
 
     private final MainService mainService;
 
-    @FXML
-    private Label versionLabel;
+    @FXML private Label versionLabel;
+    @FXML private HBox titleBar;
+    @FXML private Label welcomeLabel;
+    @FXML private Label functionsLabel;
+    @FXML private Button profileButton;
+    @FXML private Button minimizeButton;
+    @FXML private Button maximizeButton;
+    @FXML private Button closeButton;
+    @FXML private Button textButton;
+    @FXML private Button imageButton;
+    @FXML private Button videoButton;
+    @FXML private Button audioButton;
+    @FXML private Button settingsButton;
+    @FXML private Button updateButton;
+    @FXML private StackPane updateOverlay;
+    @FXML private TextArea changelogTextArea;
+    @FXML private Button aboutButton;
+    @FXML private Button exitButton;
+    @FXML private StackPane contentArea;
+    @FXML private Label modalTitleLabel;
+    @FXML private Button closeModalButton;
+    @FXML private Button installUpdateButton;
 
-    @FXML
-    private HBox titleBar;
-
-    @FXML
-    private Label welcomeLabel;
-
-    @FXML
-    private Label functionsLabel;
-
-    @FXML
-    private Button profileButton;
-
-    @FXML
-    private Button minimizeButton;
-
-    @FXML
-    private Button maximizeButton;
-
-    @FXML
-    private Button closeButton;
-
-    @FXML
-    private Button textButton;
-
-    @FXML
-    private Button imageButton;
-
-    @FXML
-    private Button videoButton;
-
-    @FXML
-    private Button audioButton;
-
-    @FXML
-    private Button settingsButton;
-
-    @FXML
-    private Button updateButton;
-
-    @FXML
-    private Button aboutButton;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private StackPane contentArea;
 
     public MainController(MainService mainService) {
         this.mainService = mainService;
@@ -80,19 +56,25 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        Map<String, Labeled> uiElements = new HashMap<>();
-        uiElements.put("functions", functionsLabel);
-        uiElements.put("profile", profileButton);
-        uiElements.put("welcome", welcomeLabel);
-        uiElements.put("textButton", textButton);
-        uiElements.put("imageButton", imageButton);
-        uiElements.put("videoButton", videoButton);
-        uiElements.put("audioButton", audioButton);
-        uiElements.put("settingsButton", settingsButton);
-        uiElements.put("updateButton", updateButton);
-        uiElements.put("versionLabel", versionLabel);
+        mainService.initMainView(titleBar, getXmlNodes());
+    }
 
-        mainService.initMainView(titleBar, uiElements);
+    private Map<String, Node> getXmlNodes() {
+        Map<String, Node> nodes = new HashMap<>();
+        for (Field field : this.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(FXML.class) && Node.class.isAssignableFrom(field.getType())) {
+                try {
+                    field.setAccessible(true); // Даем доступ к private полям
+                    Node node = (Node) field.get(this);
+                    if (node != null) {
+                        nodes.put(field.getName(), node);
+                    }
+                } catch (IllegalAccessException e) {
+                    log.error("Ошибка при сборке карты узлов: {}", e.getMessage());
+                }
+            }
+        }
+        return nodes;
     }
 
     @FXML
@@ -112,7 +94,17 @@ public class MainController {
 
     @FXML
     private void onUpdateClick() {
-        mainService.handleUpdateAction();
+        mainService.showUpdateModal(updateOverlay, modalTitleLabel, changelogTextArea);
+    }
+
+    @FXML
+    private void onCloseModalClick() {
+        mainService.hideUpdateModal(updateOverlay);
+    }
+
+    @FXML
+    private void onInstallUpdateClick() {
+        mainService.startInstallation();
     }
 
     @FXML

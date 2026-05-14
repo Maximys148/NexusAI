@@ -58,8 +58,7 @@ public class SettingsController {
 
     @FXML
     public void initialize() {
-        Map<String, Node> uiElements = getXmlNodes();
-        settingService.initSettingsView(uiElements);
+        settingService.initSettingsView(getXmlNodes());
     }
 
     private Map<String, Node> getXmlNodes() {
