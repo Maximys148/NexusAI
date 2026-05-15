@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
+// Сервис отвечающий за локализацию приложения
+
 @Service
 public class LanguageService {
 

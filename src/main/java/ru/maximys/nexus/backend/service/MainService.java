@@ -16,7 +16,6 @@ import ru.maximys.nexus.backend.model.GitHubReleaseInfo;
 import ru.maximys.nexus.backend.service.update.UpdateService;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Фасад-координатор для MainController.
@@ -53,7 +52,7 @@ public class MainService {
         this.appSettings = appSettings;
     }
 
-    // ==================== ЕДИНСТВЕННЫЙ МЕТОД ИНИЦИАЛИЗАЦИИ ====================
+    // ==================== МЕТОД ИНИЦИАЛИЗАЦИИ ====================
 
     public void initMainView(HBox titleBar, Map<String, Node> uiElements) {
         windowGeometryService.setupWindowGeometry(titleBar, appSettings);
@@ -69,27 +68,16 @@ public class MainService {
     // ==================== МОДАЛЬНОЕ ОКНО ОБНОВЛЕНИЙ ====================
 
     public void showUpdateModal(StackPane updateOverlay, Label modalTitleLabel, TextArea changelogTextArea) {
-        if (activeReleaseInfo == null) return;
-
-        langService.bindText(modalTitleLabel, "ui.update.modal.title", activeReleaseInfo.getTagName());
-        changelogTextArea.setText(langService.parseChangelog(activeReleaseInfo.getBody()));
-
-        updateOverlay.setVisible(true);
-        updateOverlay.setManaged(true);
+        navService.showUpdateModal(updateOverlay, modalTitleLabel, changelogTextArea, activeReleaseInfo);
     }
 
     public void hideUpdateModal(StackPane updateOverlay) {
         updateOverlay.setVisible(false);
         updateOverlay.setManaged(false);
     }
-
     // ==================== ОБНОВЛЕНИЯ ====================
 
     public void startInstallation() {
-        updateService.processUpdate();
-    }
-
-    public void handleUpdateAction() {
         updateService.processUpdate();
     }
 

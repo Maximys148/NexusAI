@@ -29,7 +29,6 @@ public class MainController {
     @FXML private Label versionLabel;
     @FXML private HBox titleBar;
     @FXML private Label welcomeLabel;
-    @FXML private Label functionsLabel;
     @FXML private Button profileButton;
     @FXML private Button minimizeButton;
     @FXML private Button maximizeButton;

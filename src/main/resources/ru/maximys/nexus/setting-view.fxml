@@ -1,19 +1,11 @@
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-
-<?import javafx.scene.layout.Pane?>
-
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Slider?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <VBox spacing="20" alignment="TOP_LEFT" style="-fx-padding: 30;"
       xmlns="http://javafx.com"
       xmlns:fx="http://javafx.com"
       fx:controller="ru.maximys.nexus.ui.controller.SettingsController">
 
-    <Label fx:id="settingsHeaderLabel" text="Настройки внешнего вида" styleClass="title-2"/>
+    <Label fx:id="settingsHeaderLabel" text="Setting interface" styleClass="title-2"/>
 
     <!-- Тема -->
     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -29,13 +21,13 @@
         <ComboBox fx:id="languageComboBox" prefWidth="200" />
     </HBox>
 
+    <!-- Масштаб -->
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label fx:id="scalingTitleLabel" text="Масштаб интерфейса:" styleClass="title-4" />
+        <Label fx:id="scalingTitleLabel" text="Scale" styleClass="title-4" />
         <Pane HBox.hgrow="ALWAYS" />
         <!-- Теперь здесь ComboBox вместо Slider -->
         <ComboBox fx:id="scalingComboBox" prefWidth="200" />
     </HBox>
-
 
     <!-- Автозагрузка -->
     <HBox spacing="10" alignment="CENTER_LEFT">

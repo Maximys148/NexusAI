@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import org.springframework.stereotype.Service;
 import ru.maximys.nexus.backend.config.AppSettings;
 
+// Сервис отвечающий за перемещение окна приложения, изменения его размеров и т.д.
+
 @Service
 public class WindowGeometryService {
 

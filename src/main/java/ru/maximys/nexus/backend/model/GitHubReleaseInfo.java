@@ -6,17 +6,17 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+// Информация об обновления из GitHub Releases API
+
+@Getter
+@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubReleaseInfo {
     
     @JsonProperty("tag_name")
-    @Getter
-    @Setter
     private String tagName; // Например, "v0.3.0"
 
     @JsonProperty("body")
-    @Getter
-    @Setter
     private String body; // Текст описания релиза (Changelog)
 
 }

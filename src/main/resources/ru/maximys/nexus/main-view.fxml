@@ -31,8 +31,6 @@
         <HBox VBox.vgrow="ALWAYS">
             <!-- Сайдбар -->
             <VBox prefWidth="200" spacing="5" style="-fx-background-color: -color-bg-inset; -fx-padding: 10;">
-                <Label fx:id="functionsLabel" text="FUNCTION"
-                       style="-fx-font-size: 10; -fx-text-fill: -color-fg-muted; -fx-padding: 0 0 5 5;"/>
                 <Button fx:id="textButton" text="Text" onAction="#onChatButtonClick"
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
                 <Button fx:id="imageButton" text="Image" onAction="#onImageButtonClick"

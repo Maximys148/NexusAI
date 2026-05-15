@@ -2,11 +2,15 @@ package ru.maximys.nexus.backend.service;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.maximys.nexus.backend.model.GitHubReleaseInfo;
+
 import java.io.IOException;
 
 // Сервис отвечающий за переключение между окнами
@@ -45,6 +49,47 @@ public class NavigationService {
         } catch (IOException e) {
             log.error("Не удалось загрузить FXML: " + fxmlName, e);
         }
+    }
+
+    // ==================== МОДАЛЬНОЕ ОКНО ОБНОВЛЕНИЙ ====================
+
+    /**
+     * Показывает модальное окно с информацией об обновлении.
+     *
+     * @param overlay StackPane-оверлей для отображения модалки
+     * @param modalTitleLabel Label для заголовка модалки
+     * @param changelogTextArea TextArea для отображения changelog
+     * @param releaseInfo данные релиза для отображения
+     */
+
+    public void showUpdateModal(
+            StackPane overlay,
+            Label modalTitleLabel,
+            TextArea changelogTextArea,
+            GitHubReleaseInfo releaseInfo
+    ) {
+        if (releaseInfo == null) {
+            log.warn("Попытка показать модалку обновления с null releaseInfo");
+            return;
+        }
+
+        // Биндинг локализованного заголовка с параметром
+        langService.bindText(modalTitleLabel, "ui.update.modal.title", releaseInfo.getTagName());
+
+        // Парсинг и отображение чейнджлога
+        changelogTextArea.setText(langService.parseChangelog(releaseInfo.getBody()));
+
+        // Показ оверлея
+        overlay.setVisible(true);
+        overlay.setManaged(true);
+    }
+
+    /**
+     * Скрывает модальное окно обновления.
+     */
+    public void hideUpdateModal(StackPane overlay) {
+        overlay.setVisible(false);
+        overlay.setManaged(false);
     }
 }
 

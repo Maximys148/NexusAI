@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.maximys.nexus.backend.service.MainService;
 
+// Запоминает настройки пользователя
+
 @Component
 public class AppSettings {
     private final Preferences prefs = Preferences.userRoot().node("ru.maximys.nexusai");

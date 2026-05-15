@@ -26,10 +26,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-/**
- * Сервис управления обновлениями через GitHub Releases API.
- * Полностью инкапсулирует логику: проверка, загрузка, установка.
- */
+// Сервис управления обновлениями через GitHub Releases API
+
 @Service
 public class UpdateService {
 
