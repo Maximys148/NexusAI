@@ -30,7 +30,7 @@ public class SettingService {
     private final AppSettings appSettings;
 
     private final Map<String, String> languages = Map.of(
-            "Русский", "com",
+            "Русский", "ru",
             "English", "en"
     );
 

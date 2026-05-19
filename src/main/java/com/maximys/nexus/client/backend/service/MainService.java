@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -86,6 +87,10 @@ public class MainService {
     public void navigateToChat(StackPane area) {
         log.info("Переход в раздел текст");
         navService.load(area, "chat-view.fxml");
+    }
+
+    public void navigateToModels(StackPane area) {
+        navService.load(area,"models-view.fxml");
     }
 
     public void navigateToSettings(StackPane area) {

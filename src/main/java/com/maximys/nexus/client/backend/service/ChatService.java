@@ -6,8 +6,10 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -18,6 +20,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -72,6 +75,62 @@ public class ChatService {
         }
     }
 
+    // Добавьте это поле в начало ChatService
+    private final List<String> attachedFiles = new ArrayList<>();
+
+    /**
+     * Логика выбора файлов и безопасного кроссплатформенного рендеринга текста прикреплений.
+     */
+    public void handleFileAttachment(Label attachedFilesLabel) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Выберите файлы");
+
+        List<java.io.File> selectedFiles = fileChooser.showOpenMultipleDialog(null);
+        if (selectedFiles != null) {
+            for (java.io.File file : selectedFiles) {
+                attachedFiles.add(file.getAbsolutePath());
+            }
+
+            // Безопасное обновление текста без крашей с индексами
+            if (attachedFiles.isEmpty()) {
+                attachedFilesLabel.setText("");
+            } else if (attachedFiles.size() == 1) {
+                java.io.File singleFile = new java.io.File(attachedFiles.get(0));
+                attachedFilesLabel.setText("📎 " + singleFile.getName());
+            } else {
+                attachedFilesLabel.setText(attachedFiles.size() + " файл(ов) прикреплено");
+            }
+            log.info("[Service] Файлы закешированы. Всего: {}", attachedFiles.size());
+        }
+    }
+
+    /**
+     * Единый воркфлоу отправки сообщения, очистки полей и асинхронного рендеринга ответа.
+     */
+    public void sendMessageWorkflow(String text, String model, boolean isLocal,
+                                    TextField inputField, Label filesLabel,
+                                    ScrollPane scrollPane, VBox container) {
+
+        if (text.isEmpty() && attachedFiles.isEmpty()) return;
+
+        // Фиксируем баббл пользователя на экране
+        addMessage(text, true, scrollPane, container);
+        inputField.clear();
+
+        // Скопировали файлы для отправки и очистили кэш прикреплений
+        List<String> filesToSend = new ArrayList<>(attachedFiles);
+        attachedFiles.clear();
+        filesLabel.setText("");
+
+        // Асинхронный сетевой запрос к серверу (или Ollama)
+        sendRequestToAi(text, model, filesToSend, isLocal)
+                .thenAccept(aiResponse -> {
+                    // Рендерим ответ ИИ
+                    addMessage(aiResponse, false, scrollPane, container);
+                });
+    }
+
+
     private String parseAiResponse(String responseBody, boolean isLocal) {
         try {
             Map<?, ?> map = objectMapper.readValue(responseBody, Map.class);
@@ -110,4 +169,54 @@ public class ChatService {
             log.debug("[UI] Новое сообщение отрендерено на экране. Автор: {}", isUser ? "USER" : "AI");
         });
     }
+
+    /**
+     * Асинхронно выгружает историю сообщений из PostgreSQL бэкенда
+     * и рендерит баблы переписки на экране JavaFX.
+     */
+    public void loadChatHistory(ScrollPane chatScrollPane, VBox messageContainer) {
+        try {
+            log.info("[ChatService] Запрос истории переписки с сервера...");
+            // Формируем URL эндпоинта истории: http://localhost:8080/api/chat/history
+            String historyUrl = serverUrl.replace("/send", "/history");
+
+            java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                    .uri(java.net.URI.create(historyUrl))
+                    .GET()
+                    .timeout(java.time.Duration.ofSeconds(10))
+                    .build();
+
+            httpClient.sendAsync(request, java.net.http.HttpResponse.BodyHandlers.ofString())
+                    .thenAccept(response -> {
+                        if (response.statusCode() == 200) {
+                            try {
+                                // Парсим JSON-массив сообщений из БД
+                                List<Map<?, ?>> messages = objectMapper.readValue(response.body(), List.class);
+
+                                // Возвращаемся в UI поток JavaFX для отрисовки всей пачки сообщений
+                                javafx.application.Platform.runLater(() -> {
+                                    messageContainer.getChildren().clear(); // Чистим старый контейнер
+                                    for (Map<?, ?> msg : messages) {
+                                        String content = msg.get("content").toString();
+                                        boolean isUser = "USER".equals(msg.get("senderType").toString());
+                                        // Вызываем ваш стандартный метод отрисовки баблов
+                                        addMessage(content, isUser, chatScrollPane, messageContainer);
+                                    }
+                                    log.info("[ChatService] Успешно восстановлено {} сообщений из базы данных.", messages.size());
+                                });
+                            } catch (Exception e) {
+                                log.error("[ChatService] Ошибка десериализации истории сообщений: ", e);
+                            }
+                        } else {
+                            log.warn("[ChatService] Сервер вернул код {} при запросе истории", response.statusCode());
+                        }
+                    }).exceptionally(ex -> {
+                        log.warn("[ChatService] Не удалось загрузить историю чата (Бэкенд недоступен или оффлайн)");
+                        return null;
+                    });
+        } catch (Exception e) {
+            log.error("[ChatService] Ошибка построения запроса истории: ", e);
+        }
+    }
+
 }

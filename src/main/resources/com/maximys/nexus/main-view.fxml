@@ -39,6 +39,8 @@
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
                 <Button fx:id="audioButton" text="Audio"
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+                <Button fx:id="modelsButton" text="Models" onAction="#onModelsButtonClick"
+                        maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
                 <Spacer VBox.vgrow="ALWAYS"/>
                 <Separator />
                 <Button fx:id="settingsButton" text="Settings" onAction="#onSettingButtonClick"

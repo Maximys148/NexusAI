@@ -3,6 +3,7 @@ package com.maximys.nexus;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,6 +16,7 @@ import com.maximys.nexus.client.backend.service.MainApplicationService;
 @EnableAsync
 public class MainApplication extends Application {
 
+    @Getter
     private static ConfigurableApplicationContext springContext;
 
     @Override
@@ -32,10 +34,6 @@ public class MainApplication extends Application {
     public void stop() {
         springContext.close();
         Platform.exit();
-    }
-
-    public static ConfigurableApplicationContext getContext() {
-        return springContext;
     }
 
     public static void main(String[] args) {

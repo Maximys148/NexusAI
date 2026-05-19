@@ -1,5 +1,6 @@
 package com.maximys.nexus.client.ui.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -36,6 +37,7 @@ public class MainController {
     @FXML private Button imageButton;
     @FXML private Button videoButton;
     @FXML private Button audioButton;
+    @FXML private Button modelsButton;
     @FXML private Button settingsButton;
     @FXML private Button updateButton;
     @FXML private StackPane updateOverlay;
@@ -83,6 +85,11 @@ public class MainController {
     @FXML
     public void onImageButtonClick() {
         mainService.navigateToImage(contentArea);
+    }
+
+    @FXML
+    public void onModelsButtonClick(){
+        mainService.navigateToModels(contentArea);
     }
 
     @FXML
