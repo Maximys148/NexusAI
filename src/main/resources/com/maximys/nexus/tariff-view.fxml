@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="TOP_LEFT" style="-fx-padding: 30;"
+      xmlns="http://javafx.com"
+      xmlns:fx="http://javafx.com"
+      fx:controller="com.maximys.nexus.client.ui.controller.TariffController">
+
+    <!-- Заголовок страницы с иконкой -->
+    <VBox spacing="5">
+        <Label fx:id="tariffHeaderLabel" text="Облачные модели" styleClass="title-2"/>
+        <Label fx:id="tariffSubHeaderLabel" text="Подключите мощные удаленные нейросети без нагрузки на ваш ПК" styleClass="text-muted"/>
+    </VBox>
+
+    <Separator />
+
+    <!-- Контейнер-сетка для карточек -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge" style="-fx-background-color: transparent;">
+        <FlowPane fx:id="tariffsContainer" hgap="20" vgap="20" style="-fx-background-color: transparent;">
+            <!-- Карточки будут сгенерированы кодом из TariffUiService -->
+        </FlowPane>
+    </ScrollPane>
+</VBox>

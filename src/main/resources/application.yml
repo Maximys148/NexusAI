@@ -1,7 +1,14 @@
+spring:
+  main:
+    web-application-type: none  # Отключает запуск встроенного Tomcat на порту 8080
 app:
   github:
     api:
       url:
-        "https://api.github.com/repos/Maximys148/NexusAI/releases/latest"
+        "https://api.github.com/repos/Maximys148/NexusAI/releases"
   version:
     "@project.version@"
+  ai:
+    server:
+      url:
+        "http://localhost:8080/api/chat/send"

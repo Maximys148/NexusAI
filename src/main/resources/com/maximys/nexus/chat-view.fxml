@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600.0" prefWidth="750.0" spacing="10" style="-fx-padding: 15;" stylesheets="@/css/mainStyle.css" VBox.vgrow="ALWAYS" xmlns="http://javafx.com" xmlns:fx="http://javafx.com" fx:controller="com.maximys.nexus.client.ui.controller.ChatController">
+
+    <!-- Область диалога чата -->
+    <ScrollPane fx:id="chatScrollPane" fitToWidth="true" style="-fx-background-color: transparent;" styleClass="edge-to-edge" VBox.vgrow="ALWAYS">
+        <VBox fx:id="messageContainer" spacing="15" style="-fx-padding: 10;">
+            <children>
+                <Label styleClass="text-muted" text="Nexus AI: Привет! Чем я могу помочь?" />
+            </children>
+        </VBox>
+    </ScrollPane>
+
+    <!-- Информационная строка прикрепленных файлов -->
+    <Label fx:id="attachedFilesLabel" styleClass="text-muted" style="-fx-font-size: 12px; -fx-padding: 0 0 0 5;" text="" />
+
+    <!-- Панель ввода -->
+    <HBox alignment="CENTER_LEFT" spacing="8.0">
+        <children>
+            <!-- ComboBox настроен через CSS, ширина фиксирована под названия моделей -->
+            <ComboBox fx:id="modelComboBox" prefWidth="180.0" minWidth="180.0" maxWidth="220.0" promptText="Выберите модель" styleClass="large, flat" HBox.hgrow="NEVER" />
+            <Button fx:id="attachFileButton" mnemonicParsing="false" onAction="#onAttachFile" styleClass="secondary, large, flat" text="📎" HBox.hgrow="NEVER" />
+            <TextField fx:id="userMessageField" onAction="#onSendMessage" promptText="Напишите запрос..." styleClass="large" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#onSendMessage" styleClass="accent, large" text="Отправить" HBox.hgrow="NEVER" />
+        </children>
+    </HBox>
+</VBox>

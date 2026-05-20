@@ -86,3 +86,21 @@
     -fx-text-fill: -color-fg-default;
     -fx-background-radius: 15 15 15 2; /* Острый угол слева снизу */
 }
+
+/* Жестко фиксируем направление раскрытия контекстного окна */
+.combo-box .context-menu {
+    -fx-popup-side: top !important;
+}
+
+/* Хак для AtlantaFX: инвертируем отступы, чтобы меню прилипало к верхней границе поля ввода, а не к нижней */
+.combo-box-popup {
+    -fx-popup-side: top !important;
+    -fx-translate-y: -280px; /* Сдвигаем окно вверх на примерную высоту списка (подберите под себя) */
+}
+
+/* Стилизация нескачанных (отключенных) элементов */
+.combo-box-popup .list-cell:disabled {
+    -fx-text-fill: -color-fg-muted !important;
+    -fx-opacity: 0.4;
+    -fx-font-style: italic;
+}

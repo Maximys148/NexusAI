@@ -6,7 +6,7 @@
 
     <groupId>sample</groupId>
     <artifactId>Nexus</artifactId>
-    <version>0.5.1</version>
+    <version>0.6.0</version>
     <name>Nexus</name>
 
     <parent>
@@ -96,7 +96,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ru.maximys.nexus.Launcher</mainClass>
+                    <mainClass>com.maximys.nexus.Launcher</mainClass>
                     <!-- Это заставит Spring не перепаковывать JAR в свой формат -->
                     <skip>true</skip>
                 </configuration>
