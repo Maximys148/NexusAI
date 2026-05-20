@@ -24,6 +24,11 @@ public class LanguageService {
         setLanguage(prefs.get("app_lang", "en"));
     }
 
+    public ObjectProperty<ResourceBundle> resourcesProperty() {
+        return this.resources;
+    }
+
+
     public void saveLanguage(String langCode) {
         this.currentLangCode = langCode;
         prefs.put("app_lang", langCode);
@@ -41,8 +46,10 @@ public class LanguageService {
         this.currentLangCode = langCode;
         Locale locale = new Locale(langCode);
         ResourceBundle bundle = ResourceBundle.getBundle("i18n." + langCode + ".messages", locale);
-        resources.set(bundle);
+
+        this.resources.set(bundle);
     }
+
 
     public void bindText(Labeled element, String key, Object... args) {
         if (element != null) {

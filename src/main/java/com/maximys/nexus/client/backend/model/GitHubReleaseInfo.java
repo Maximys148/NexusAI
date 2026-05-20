@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Map;
+
 // Информация об обновления из GitHub Releases API
 
 @Getter
@@ -18,4 +21,5 @@ public class GitHubReleaseInfo {
     @JsonProperty("body")
     private String body; // Текст описания релиза (Changelog)
 
+    private List<Map<String, Object>> skippedReleases;
 }

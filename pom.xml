@@ -6,7 +6,7 @@
 
     <groupId>sample</groupId>
     <artifactId>Nexus</artifactId>
-    <version>0.5.2</version>
+    <version>0.6.0</version>
     <name>Nexus</name>
 
     <parent>

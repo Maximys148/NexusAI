@@ -1,11 +1,12 @@
 package com.maximys.nexus.client.backend.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maximys.nexus.client.backend.dto.AiModelDto;
+import com.maximys.nexus.client.backend.factory.ClientModelFactory;
+import com.maximys.nexus.client.backend.model.AiModel.ClientAiModel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -16,144 +17,70 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
-public class ModelService implements InitializingBean {
+public class ModelService {
 
-    @Value("${app.server.base-url:http://localhost:8080}")
-    private String serverBaseUrl;
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final HttpClient httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build();
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final List<AiModelDto> cachedModels = new CopyOnWriteArrayList<>();
+    // ГЛОБАЛЬНЫЙ СПИСОК (Как хранилище настроек AppSettings)
+    private final List<ClientAiModel> globalModelsRegistry = new ArrayList<>();
 
-    @Override
-    public void afterPropertiesSet() {
-        fetchModelsFromServer();
-    }
-
-    public CompletableFuture<List<AiModelDto>> fetchModelsFromServer() {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(serverBaseUrl + "/api/models/list"))
-                .GET()
-                .timeout(Duration.ofSeconds(3))
-                .build();
-
-        return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(response -> {
-                    if (response.statusCode() == 200) {
-                        try {
-                            List<AiModelDto> serverModels = mapper.readValue(
-                                    response.body(),
-                                    mapper.getTypeFactory().constructCollectionType(List.class, AiModelDto.class)
-                            );
-                            if (!serverModels.isEmpty()) {
-                                cachedModels.clear();
-                                cachedModels.addAll(serverModels);
-                                return cachedModels;
-                            }
-                        } catch (Exception e) {
-                            log.error("[ModelService] Ошибка парсинга моделей, уходим в оффлайн.");
-                        }
-                    }
-                    return fetchOnlyDownloadedOllamaModels();
-                }).exceptionally(ex -> {
-                    log.warn("[ModelService] Сервер оффлайн. Считываем локальные модели Ollama.");
-                    return fetchOnlyDownloadedOllamaModels();
-                });
-    }
-
-    private List<AiModelDto> fetchOnlyDownloadedOllamaModels() {
-        List<AiModelDto> localDownloaded = new ArrayList<>();
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:11434/api/tags"))
-                    .GET()
-                    .timeout(Duration.ofSeconds(2))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                JsonNode root = mapper.readTree(response.body());
-                JsonNode modelsNode = root.get("models");
-                if (modelsNode != null && modelsNode.isArray()) {
-                    for (JsonNode m : modelsNode) {
-                        String fullOllamaName = m.get("name").asText();
-                        String cleanName = fullOllamaName.contains(":") ? fullOllamaName.split(":")[0] : fullOllamaName;
-
-                        localDownloaded.add(new AiModelDto(
-                                fullOllamaName,
-                                cleanName.toUpperCase() + " (Локальная)",
-                                true,
-                                "Бесплатно",
-                                "Скачано",
-                                "Ваш ПК",
-                                "Автономная модель."
-                        ));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.warn("[ModelService] Локальная утилита Ollama не запущена.");
-        }
-
-        cachedModels.clear();
-        cachedModels.addAll(localDownloaded);
-        return localDownloaded;
-    }
-
-    public CompletableFuture<Boolean> isModelDownloadedLocally(String modelId) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:11434/api/tags"))
-                .GET()
-                .timeout(Duration.ofSeconds(2))
-                .build();
-
-        return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(response -> {
-                    if (response.statusCode() == 200) {
-                        try {
-                            JsonNode root = mapper.readTree(response.body());
-                            JsonNode modelsNode = root.get("models");
-                            if (modelsNode != null && modelsNode.isArray()) {
-                                for (JsonNode model : modelsNode) {
-                                    if (model.get("name").asText().startsWith(modelId)) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            log.error("Ошибка парсинга тегов Ollama");
-                        }
-                    }
-                    return false;
-                }).exceptionally(ex -> false);
+    /**
+     * Геттер для моментального синхронного доступа из других сервисов
+     */
+    public List<ClientAiModel> getModels() {
+        return this.globalModelsRegistry;
     }
 
     /**
-     * Теперь возвращает ПОЛНЫЙ список всех моделей сервера для чата.
-     * Локальные модели проверяются на скачанность, но не удаляются из списка в случае отсутствия.
+     * ВЫЗЫВАЕТСЯ ОДИН РАЗ ПРИ СТАРТЕ ПРИЛОЖЕНИЯ (в MainService / AppInitializer)
+     * Скачивает данные и сохраняет их в глобальный реестр памяти.
      */
-    public CompletableFuture<List<AiModelDto>> fetchActiveModelsForChat() {
-        return fetchModelsFromServer().exceptionally(ex -> {
-            log.warn("[ModelService] Сервер оффлайн, чат использует локальные теги Ollama");
-            return fetchOnlyDownloadedOllamaModels();
-        });
-    }
+    public CompletableFuture<Void> syncModelsFromServer() {
+        String targetUrl = "http://localhost:8080/api/models/list";
+        log.info("[HTTP-GET] Первичная синхронизация каталога моделей: {}", targetUrl);
 
-    public List<AiModelDto> getCachedModels() {
-        return new ArrayList<>(this.cachedModels);
-    }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(targetUrl))
+                .header("Accept", "application/json")
+                .GET()
+                .timeout(Duration.ofSeconds(10))
+                .build();
 
-    public boolean checkIfModelIsLocal(String modelId) {
-        if (modelId == null) return false;
-        return cachedModels.stream()
-                .filter(m -> modelId.equals(m.getId()))
-                .findFirst()
-                .map(AiModelDto::isLocal)
-                .orElse(false);
+        return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() == 200) {
+                        try {
+                            List<AiModelDto> dtoList = objectMapper.readValue(
+                                    response.body(),
+                                    new TypeReference<List<AiModelDto>>() {}
+                            );
+
+                            List<ClientAiModel> clientModels = dtoList.stream()
+                                    .map(ClientModelFactory::create)
+                                    .toList();
+
+                            // АТОМАРНО ОБНОВЛЯЕМ ГЛОБАЛЬНЫЙ СПИСОК
+                            synchronized (globalModelsRegistry) {
+                                globalModelsRegistry.clear();
+                                globalModelsRegistry.addAll(clientModels);
+                            }
+
+                            log.info("[HTTP-CLIENT] Глобальный реестр моделей успешно заполнен. Всего: {} шт.", globalModelsRegistry.size());
+                        } catch (Exception e) {
+                            log.error("[HTTP-GET] Критическая ошибка парсинга каталога моделей: ", e);
+                        }
+                    } else {
+                        log.warn("[HTTP-GET] Сервер вернул ошибку каталога. Статус: {}", response.statusCode());
+                    }
+                })
+                .exceptionally(ex -> {
+                    log.error("[HTTP-GET] Бэкенд недоступен. Работаем в оффлайн-режиме: {}", ex.getMessage());
+                    return null;
+                });
     }
 }

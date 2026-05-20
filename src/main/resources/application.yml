@@ -5,7 +5,7 @@ app:
   github:
     api:
       url:
-        "https://api.github.com/repos/Maximys148/NexusAI/releases/latest"
+        "https://api.github.com/repos/Maximys148/NexusAI/releases"
   version:
     "@project.version@"
   ai:

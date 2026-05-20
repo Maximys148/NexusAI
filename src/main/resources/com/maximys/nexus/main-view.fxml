@@ -30,6 +30,7 @@
         <!-- Основная рабочая область -->
         <HBox VBox.vgrow="ALWAYS">
             <!-- Сайдбар -->
+            <!-- Сайдбар -->
             <VBox prefWidth="200" spacing="5" style="-fx-background-color: -color-bg-inset; -fx-padding: 10;">
                 <Button fx:id="textButton" text="Text" onAction="#onChatButtonClick"
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
@@ -39,8 +40,13 @@
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
                 <Button fx:id="audioButton" text="Audio"
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
-                <Button fx:id="modelsButton" text="Models" onAction="#onModelsButtonClick"
+
+                <!-- НОВЫЕ ВКЛАДКИ ВЗАМЕН СТАРОЙ MODELS -->
+                <Button fx:id="localModelsButton" text="💻 Local Models" onAction="#onLocalModelsButtonClick"
                         maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+                <Button fx:id="tariffsButton" text="💎 Tariffs" onAction="#onTariffsButtonClick"
+                        maxWidth="Infinity" alignment="BASELINE_LEFT" styleClass="flat" />
+
                 <Spacer VBox.vgrow="ALWAYS"/>
                 <Separator />
                 <Button fx:id="settingsButton" text="Settings" onAction="#onSettingButtonClick"
@@ -60,6 +66,7 @@
                 <!-- Метка версии -->
                 <Label fx:id="versionLabel" style="-fx-font-size: 10; -fx-opacity: 0.4; -fx-padding: 5 0 0 5;"/>
             </VBox>
+
 
             <!-- Область контента -->
             <StackPane fx:id="contentArea" HBox.hgrow="ALWAYS" style="-fx-background-color: -color-bg-default; -fx-padding: 20;">

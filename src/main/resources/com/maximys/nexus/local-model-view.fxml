@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import atlantafx.base.controls.Spacer?>
+
+<VBox spacing="20" alignment="TOP_LEFT" style="-fx-padding: 30;"
+      xmlns="http://javafx.com"
+      xmlns:fx="http://javafx.com"
+      fx:controller="com.maximys.nexus.client.ui.controller.LocalModelController">
+
+    <!-- Заголовок страницы -->
+    <VBox spacing="5">
+        <Label fx:id="localHeaderLabel" text="Local AI Models" styleClass="title-2"/>
+        <Label fx:id="localSubHeaderLabel" text="Manage and run models on your device" styleClass="text-muted"/>
+    </VBox>
+
+    <Separator />
+
+    <!-- Список моделей в виде карточек -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge" style="-fx-background-color: transparent;">
+        <VBox fx:id="modelsContainer" spacing="15" style="-fx-background-color: transparent;">
+            <!-- Сюда динамически будут добавляться карточки моделей из сервиса -->
+        </VBox>
+    </ScrollPane>
+</VBox>

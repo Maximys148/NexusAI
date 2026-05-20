@@ -35,5 +35,4 @@
         <Pane HBox.hgrow="ALWAYS" />
         <CheckBox fx:id="startupCheckBox" />
     </HBox>
-
 </VBox>

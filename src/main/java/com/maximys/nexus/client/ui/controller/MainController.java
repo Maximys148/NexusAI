@@ -37,7 +37,8 @@ public class MainController {
     @FXML private Button imageButton;
     @FXML private Button videoButton;
     @FXML private Button audioButton;
-    @FXML private Button modelsButton;
+    @FXML private Button localModelsButton;
+    @FXML private Button tariffsButton;
     @FXML private Button settingsButton;
     @FXML private Button updateButton;
     @FXML private StackPane updateOverlay;
@@ -88,8 +89,13 @@ public class MainController {
     }
 
     @FXML
-    public void onModelsButtonClick(){
-        mainService.navigateToModels(contentArea);
+    public void onLocalModelsButtonClick() {
+        mainService.navigateToLocalModels(contentArea);
+    }
+
+    @FXML
+    public void onTariffsButtonClick() {
+        mainService.navigateToTariffs(contentArea);
     }
 
     @FXML
